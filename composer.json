@@ -1,0 +1,24 @@
+{
+    "name": "pcabreus/openfire-userservice-plugin",
+    "type": "library",
+    "description": "A PHP application for manage the UserService Plugin of Openfire",
+    "keywords": ["openfire","userserver", "positibelabs"],
+    "homepage": "http://positibelabs.blogspot.com/libraries/openfire-userservice",
+    "license": "Private",
+    "version": "0.1.0.0",
+    "authors": [
+        {
+            "name": "Pedro Carlos Abreu Jiménez",
+            "email": "pcabreus@gmail.com",
+            "homepage": "https://github.com/pcabreus"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Pcabreus\\Openfire": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
