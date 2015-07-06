@@ -1,7 +1,7 @@
-UserServret
-===========
+UserServerPlugin
+================
 
-This library is an implementation for interact with UserService plugin of Openfire.
+This library is an implementation to manage users into Openfire server with UserService plugin.
 
 Attention for v0.1
 ------------------
