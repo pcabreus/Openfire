@@ -2,6 +2,8 @@
 
 namespace Pcabreus\Openfire;
 
+use Symfony\Component\Debug\Exception\ContextErrorException;
+
 /***
  * Class UserServicePlugin
  * Openfire plugin userService for user manage.
@@ -32,6 +34,37 @@ class UserServicePlugin
     }
 
     /**
+     * Response the operation on openfire server
+     *
+     * Responses
+     *      ok: The operation is successful
+     *      UserAlreadyExistsException: The user is already on the openfire server
+     *      RequestNotAuthorised: You has not permission a make a change
+     *      IllegalArgumentException: The arguments are invalid
+     *      UserNotFoundException: User not found on the openfire server
+     *      ContentErrorException: Can't communicate with the openfire server
+     *      BadResponseError: Response is no good
+     *      Error: Some error happen.
+     *
+     * @param $url
+     * @return string
+     */
+    public function get($url)
+    {
+        try {
+            $content = file_get_contents($url);
+            $response = explode('<', explode('>', $content)[1])[0];
+        } catch (ContextErrorException $e) {
+            $response = 'ContextErrorException';
+            dump($e);
+        } catch (\Exception $e) {
+            $response = 'Error';
+        }
+
+        return $response;
+    }
+
+    /**
      * @param $username
      * @param $password
      * @param null $name
@@ -41,7 +74,9 @@ class UserServicePlugin
      */
     public function addUser($username, $password, $name = null, $email = null, array $groups = null)
     {
-        return $this->buildRequest(UserServicePlugin::TYPE_ADD, $username, $password, $name, $email, $groups);
+        return $this->get(
+            $this->buildRequest(UserServicePlugin::TYPE_ADD, $username, $password, $name, $email, $groups)
+        );
     }
 
     /**
@@ -54,7 +89,9 @@ class UserServicePlugin
      */
     public function updateUser($username, $password = null, $name = null, $email = null, array $groups = null)
     {
-        return $this->buildRequest(UserServicePlugin::TYPE_UPDATE, $username, $password, $name, $email, $groups);
+        return $this->get(
+            $this->buildRequest(UserServicePlugin::TYPE_UPDATE, $username, $password, $name, $email, $groups)
+        );
     }
 
     /**
@@ -63,7 +100,7 @@ class UserServicePlugin
      */
     public function deleteUser($username)
     {
-        return $this->buildRequest(UserServicePlugin::TYPE_DELETE, $username);
+        return $this->get($this->buildRequest(UserServicePlugin::TYPE_DELETE, $username));
     }
 
     /**
